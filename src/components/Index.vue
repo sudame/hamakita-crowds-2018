@@ -10,7 +10,7 @@
         sui-table-row
             sui-table-header-cell(v-for="c in columns" :key="c.key") {{c.text}}
       sui-table-body
-        sui-table-row(v-for="d in data" :key="d.id")
+          sui-table-row(v-for="d in tableData" :key="d.id")
           sui-table-cell(v-for="c in columns" :key="c.key") {{d[c.key]}}
             template(v-if="c.key == 'people'") 人
             template(v-if="c.key == 'wait'") 分
