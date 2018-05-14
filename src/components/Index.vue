@@ -12,7 +12,16 @@
 </template>
 
 <script>
+import firebase from 'firebase';
+import firebaseKey from '../../firebase.key';
+
+const firebaseApp = firebase.initializeApp(firebaseKey);
+const db = firebaseApp.firestore();
+
 export default {
+  firestore: {
+    data: db.collection('data'),
+  },
   data() {
     return {
       columns: [
@@ -37,26 +46,7 @@ export default {
           value: 'wait',
         },
       ],
-      data: [
-        {
-          id: 0,
-          name: '10HR',
-          people: '32',
-          wait: '14',
-        },
-        {
-          id: 1,
-          name: '11HR',
-          people: '53',
-          wait: '87',
-        },
-        {
-          id: 2,
-          name: '12HR',
-          people: '37',
-          wait: '34',
-        },
-      ],
+      data: [],
     };
   },
 };
