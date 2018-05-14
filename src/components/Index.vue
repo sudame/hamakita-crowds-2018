@@ -75,6 +75,14 @@ export default {
       this.tableFilter();
     });
   },
+  watch: {
+    sortKey() {
+      this.tableSort();
+    },
+    sortAbs() {
+      this.tableSort();
+    },
+  },
     };
   },
 };
