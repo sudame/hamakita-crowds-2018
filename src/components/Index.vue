@@ -4,16 +4,16 @@
       sui-dropdown(button class="primary" v-model="sortKey" :options="columns")
       sui-dropdown(button class="primary" v-model="sortAbs" :options="sortAbsOptions")
       sui-input(v-model="filterWord" @input="tableFilter()" icon="search" placeholder="検索")
-  div(is="sui-container")
-    sui-table(striped unstackable)
-      sui-table-header
-        sui-table-row
+    div(is="sui-container")
+      sui-table(striped unstackable)
+        sui-table-header
+          sui-table-row
             sui-table-header-cell(v-for="c in columns" :key="c.key") {{c.text}}
-      sui-table-body
+        sui-table-body
           sui-table-row(v-for="d in tableData" :key="d.id")
-          sui-table-cell(v-for="c in columns" :key="c.key") {{d[c.key]}}
-            template(v-if="c.key == 'people'") 人
-            template(v-if="c.key == 'wait'") 分
+            sui-table-cell(v-for="c in columns" :key="c.key") {{d[c.key]}}
+              template(v-if="c.key == 'people'") 人
+              template(v-if="c.key == 'wait'") 分
       .loader-wrapper
         sui-loader.inline(:active="isUnloaded")
 </template>
@@ -108,8 +108,8 @@ export default {
         if (a[key] > b[key]) return this.sortAbs;
         else if (a[key] < b[key]) return this.sortAbs * -1;
         return 0;
-    };
-  },
+      };
+    },
   },
 };
 </script>
