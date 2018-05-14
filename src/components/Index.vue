@@ -25,29 +25,43 @@ const firestoreSetting = {
 firestore.settings(firestoreSetting);
 
 export default {
-  firestore: {
-    data: db.collection('data'),
-  },
   data() {
     return {
+      isUnloaded: true,
+      sortAbs: 1,
+      sortAbsOptions: [
+        {
+          text: '昇順',
+          value: 1,
+        },
+        {
+          text: '降順',
+          value: -1,
+        },
+      ],
+      filterWord: '',
+      sortKey: 'name_yomi',
       columns: [
         {
           key: 'name',
-          name: '団体名',
+          text: '団体名',
           value: 'name_yomi',
         },
         {
           key: 'people',
-          name: '待ち人数',
+          text: '待ち人数',
           value: 'people',
         },
         {
           key: 'wait',
-          name: '待ち時間',
+          text: '待ち時間',
           value: 'wait',
         },
       ],
-      data: [],
+      tableData: [],
+      rawTableData: [],
+    };
+  },
     };
   },
 };
