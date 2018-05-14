@@ -14,6 +14,8 @@
           sui-table-cell(v-for="c in columns" :key="c.key") {{d[c.key]}}
             template(v-if="c.key == 'people'") 人
             template(v-if="c.key == 'wait'") 分
+      .loader-wrapper
+        sui-loader.inline(:active="isUnloaded")
 </template>
 
 <script>
@@ -113,5 +115,7 @@ export default {
 </script>
 
 <style lang="scss">
-
+.loader-wrapper {
+  text-align: center;
+}
 </style>
