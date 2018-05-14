@@ -12,11 +12,17 @@
 </template>
 
 <script>
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import firebaseKey from '../../firebase.key';
 
+// eslint-disable-next-line
 const firebaseApp = firebase.initializeApp(firebaseKey);
-const db = firebaseApp.firestore();
+const firestore = firebase.firestore();
+const firestoreSetting = {
+  timestampsInSnapshots: true,
+};
+firestore.settings(firestoreSetting);
 
 export default {
   firestore: {
