@@ -83,7 +83,9 @@ export default {
       this.tableSort();
     },
   },
+  methods: {
     };
+  },
   },
 };
 </script>
