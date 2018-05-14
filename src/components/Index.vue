@@ -26,11 +26,6 @@ export default {
     return {
       columns: [
         {
-          key: 'id',
-          name: 'ID',
-          value: 'id',
-        },
-        {
           key: 'name',
           name: '団体名',
           value: 'name_yomi',
