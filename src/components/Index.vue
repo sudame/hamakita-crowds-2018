@@ -84,6 +84,14 @@ export default {
     },
   },
   methods: {
+    tableSort() {
+      this.tableData.sort(this.sortAlg(this.sortKey));
+    },
+    sortAlg(key) {
+      return (a, b) => {
+        if (a[key] > b[key]) return this.sortAbs;
+        else if (a[key] < b[key]) return this.sortAbs * -1;
+        return 0;
     };
   },
   },
