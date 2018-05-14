@@ -1,4 +1,8 @@
 <template lang="pug">
+  div
+    div(is="sui-container")
+      sui-dropdown(button class="primary" v-model="sortKey" :options="columns")
+      sui-dropdown(button class="primary" v-model="sortAbs" :options="sortAbsOptions")
       sui-input(v-model="filterWord" @input="tableFilter()" icon="search" placeholder="検索")
   div(is="sui-container")
     sui-table(striped unstackable)
