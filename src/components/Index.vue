@@ -8,7 +8,7 @@
     sui-table(striped unstackable)
       sui-table-header
         sui-table-row
-          sui-table-header-cell(v-for="c in columns" :key="c.key") {{c.name}}
+            sui-table-header-cell(v-for="c in columns" :key="c.key") {{c.text}}
       sui-table-body
         sui-table-row(v-for="d in data" :key="d.id")
           sui-table-cell(v-for="c in columns" :key="c.key") {{d[c.key]}}
