@@ -1,4 +1,5 @@
 <template lang="pug">
+      sui-input(v-model="filterWord" @input="tableFilter()" icon="search" placeholder="検索")
   div(is="sui-container")
     sui-table(striped unstackable)
       sui-table-header
@@ -84,6 +85,15 @@ export default {
     },
   },
   methods: {
+    tableFilter() {
+      this.tableData = this.rawTableData.filter(el => {
+        let isMatch = false;
+        Object.keys(el).forEach(key => {
+          if (el[key].toString().indexOf(this.filterWord) >= 0) isMatch = true;
+        });
+        return isMatch;
+      });
+    },
     tableSort() {
       this.tableData.sort(this.sortAlg(this.sortKey));
     },
