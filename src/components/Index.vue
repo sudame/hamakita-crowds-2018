@@ -62,6 +62,19 @@ export default {
       rawTableData: [],
     };
   },
+  created() {
+    firestore.collection('data').onSnapshot(querySnapshot => {
+      this.tableData = [];
+      this.rawTableData = [];
+      querySnapshot.forEach(doc => {
+        this.rawTableData.push(doc.data());
+      });
+      this.tableData = this.rawTableData.slice();
+      this.isUnloaded = false;
+      this.tableSort();
+      this.tableFilter();
+    });
+  },
     };
   },
 };
