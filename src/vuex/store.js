@@ -1,5 +1,7 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
+import createPersistedState from 'vuex-persistedstate';
+import * as Cookies from 'js-cookie';
 import firebase from 'firebase';
 import {
   LOGIN,
@@ -39,8 +41,8 @@ const mutations = {
   [LOGIN](state, userData) {
     state.userData = userData;
   },
-  [LOGOUT](state){
-      state.userData = {};
+  [LOGOUT](state) {
+    state.userData = {};
   }
 };
 
@@ -49,4 +51,13 @@ export default new Vuex.Store({
   getters,
   actions,
   mutations,
+  plugins: [
+    createPersistedState({
+      getState: (key) => Cookies.getJSON(key),
+      setState: (key, state) => Cookies.set(key, state, {
+        expires: 7,
+        secrure: true
+      })
+    }),
+  ]
 });
