@@ -15,7 +15,7 @@ const state = {
 };
 const actions = {
   [LOGOUT]({
-    commit
+    commit,
   }) {
     firebase.auth().signOut();
     commit(LOGOUT);
@@ -24,9 +24,8 @@ const actions = {
     commit,
   }, {
     email,
-    password
+    password,
   }) {
-    console.log(`${email} : ${password}`);
     firebase.auth().signInWithEmailAndPassword(email, password).then(d => {
       commit(LOGIN, d);
     });
@@ -40,10 +39,13 @@ const mutations = {
   // eslint-disable-next-line
   [LOGIN](state, userData) {
     state.userData = userData;
+    state.userData.isLogined = true;
   },
+  // eslint-disable-next-line
   [LOGOUT](state) {
     state.userData = {};
-  }
+    state.userData.isLogined = false;
+  },
 };
 
 export default new Vuex.Store({
@@ -53,11 +55,12 @@ export default new Vuex.Store({
   mutations,
   plugins: [
     createPersistedState({
-      getState: (key) => Cookies.getJSON(key),
+      getState: key => Cookies.getJSON(key),
+      // eslint-disable-next-line
       setState: (key, state) => Cookies.set(key, state, {
         expires: 7,
-        secrure: true
-      })
+        secrure: true,
+      }),
     }),
-  ]
+  ],
 });
