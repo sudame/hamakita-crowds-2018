@@ -7,7 +7,8 @@ import Admin from '@/components/Admin';
 Vue.use(Router);
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
       path: '/',
       name: 'Index',
       component: Index,

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import firebase from 'firebase';
 
 export default {
@@ -44,17 +44,17 @@ export default {
   },
   methods: {
     showMessage(flag) {
-      console.log('showMessage');
+      // eslint-disable-next-line
       flag === 's' ? (this.updateSuccess = true) : (this.updateFailure = true);
       setTimeout(() => {
-        console.log('hideMessage');
+        // eslint-disable-next-line
         flag === 's'
           ? (this.updateSuccess = false)
           : (this.updateFailure = false);
       }, 3000);
     },
     update() {
-      if(this.newPeople === null){
+      if (this.newPeople === null) {
         this.showMessage('f');
         return;
       }
