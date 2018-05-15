@@ -19,7 +19,7 @@ new Vue({
   el: '#app',
   router,
   components: {
-    App
+    App,
   },
   template: '<App/>',
 });
