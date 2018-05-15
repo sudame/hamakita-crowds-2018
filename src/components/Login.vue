@@ -20,6 +20,12 @@ import { mapActions, mapGetters } from 'vuex';
 import { LOGIN, LOGOUT } from '@/vuex/mutation-types';
 
 export default {
+  created(){
+    console.log(this.userData.isLogined);
+    if(this.userData.isLogined){
+      this.$router.push('/admin/');
+    }
+  },
   data() {
     return {
       email: '',
