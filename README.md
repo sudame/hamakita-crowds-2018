@@ -1,30 +1,41 @@
 # hamakita-crowds-2018
 
-> A Vue.js project
+**今年もやってきた！炎上する開発！動かないシステム！その名も「はまきたクラウズ」だ！！**
 
-## Build Setup
+## ビルド関係
 
 ``` bash
-# install dependencies
-npm install
+# 依存関係のダウンロード
+yarn install
 
-# serve with hot reload at localhost:8080
-npm run dev
+# ローカルサーバーの起動(宗教上の理由で8080ポートでおっ立つよ！)
+yarn dev
 
-# build for production with minification
+# 本番環境のビルド
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
+# テスト駆動開発にするほどのことでも無かったので、以下のコマンドは動きません
 npm run unit
-
-# run e2e tests
 npm run e2e
-
-# run all tests
 npm test
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 勘の良いガキは気づくだろうが
+
+内部で `firebase.key.js` というモジュールを読み込んでいます。これは名前の通り、firebaseの認証キーが書いてあるもの。見せられないよ！
+
+```javascript
+export default {
+  apiKey: "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  authDomain: "XXXXXXXXXXXXXX.firebaseapp.com",
+  databaseURL: "https://XXXXXXXXXXXXXXXXXXXXX",
+  projectId: "XXXXXXXXXXXXXXXXXX",
+  storageBucket: "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  messagingSenderId: "XXXXXXXXXXXXXXX"
+}
+```
+こんな感じで同名ファイルを作って上げると動くには動くはずです。
+
+ユーザー登録をfirebaseコンソールでよしなにやって、よしなにログインしてよしなに情報を登録するとよしなに動くはずです。
+
+え？動かない？それは開発が追いついていないだけだよ！
