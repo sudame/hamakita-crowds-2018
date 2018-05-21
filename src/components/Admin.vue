@@ -1,6 +1,6 @@
 <template lang="pug">
-  div(is="sui-container")
-    p {{userData.user.email}}としてログイン中
+  div(is="sui-container" v-if="this.userData.isLogined")
+    p {{userName}}としてログイン中
     sui-form
       sui-form-field
         label 現在の待ち組数
@@ -11,6 +11,7 @@
         p 変更は運営委員会に申請してください
       sui-form-field
         sui-button(primary @click="update()") 更新
+        sui-button(color="red" @click="LOGOUT()") ログアウト
     sui-message(v-if="updateSuccess" success)
       p 正常に更新しました
     sui-message(v-if="updateFailure" error)
@@ -19,19 +20,26 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import { LOGIN, LOGOUT } from '@/vuex/mutation-types';
 import firebase from 'firebase';
 
 export default {
+  mounted() {
+    if (!this.userData.isLogined) this.$router.push('/login/');
+  },
   created() {
-    firebase
-      .firestore()
-      .collection('data')
-      .doc(this.userData.user.uid)
-      .onSnapshot(snapshot => {
-        this.wait = snapshot.data().wait;
-        this.peoplePlaceholder = snapshot.data().people;
-      });
+    if (this.userData.isLogined) {
+      firebase
+        .firestore()
+        .collection('data')
+        .doc(this.userData.user.uid)
+        .onSnapshot(snapshot => {
+          this.wait = snapshot.data().waitPerGroup;
+          this.peoplePlaceholder = snapshot.data().people;
+          this.userName = snapshot.data().name;
+        });
+    }
   },
   data() {
     return {
@@ -40,17 +48,22 @@ export default {
       peoplePlaceholder: null,
       newPeople: null,
       wait: 0,
+      userName: '',
     };
   },
+  watch: {
+    userData() {
+      if (!this.userData.isLogined) this.$router.push('/login/');
+    },
+  },
   methods: {
+    ...mapActions([LOGIN, LOGOUT]),
     showMessage(flag) {
       // eslint-disable-next-line
       flag === 's' ? (this.updateSuccess = true) : (this.updateFailure = true);
       setTimeout(() => {
         // eslint-disable-next-line
-        flag === 's'
-          ? (this.updateSuccess = false)
-          : (this.updateFailure = false);
+        flag === 's' ? (this.updateSuccess = false) : (this.updateFailure = false);
       }, 3000);
     },
     update() {
@@ -65,6 +78,7 @@ export default {
         .set(
           {
             people: this.newPeople,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           },
           { merge: true },
         )
@@ -84,5 +98,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 </style>

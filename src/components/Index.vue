@@ -4,6 +4,7 @@
       sui-dropdown(button class="primary" v-model="sortKey" :options="columns")
       sui-dropdown(button class="primary" v-model="sortAbs" :options="sortAbsOptions")
       sui-input(v-model="filterWord" @input="tableFilter()" icon="search" placeholder="検索")
+    sui-divider(hidden)
     div(is="sui-container")
       sui-table(striped unstackable)
         sui-table-header
@@ -11,9 +12,10 @@
             sui-table-header-cell(v-for="c in columns" :key="c.key") {{c.text}}
         sui-table-body
           sui-table-row(v-for="d in tableData" :key="d.id")
-            sui-table-cell(v-for="c in columns" :key="c.key") {{d[c.key]}}
-              template(v-if="c.key == 'people'") 人
-              template(v-if="c.key == 'wait'") 分
+            sui-table-cell {{d.name}}
+            sui-table-cell {{d.people}} 組
+            sui-table-cell {{d.people * d.waitPerGroup}} 分
+            sui-table-cell {{Math.round((nowtime - d.timestamp.toDate())/60000)}} 分前
       .loader-wrapper
         sui-loader.inline(:active="isUnloaded")
 </template>
@@ -56,7 +58,7 @@ export default {
         },
         {
           key: 'people',
-          text: '待ち人数',
+          text: '待ち組数',
           value: 'people',
         },
         {
@@ -64,9 +66,15 @@ export default {
           text: '待ち時間',
           value: 'wait',
         },
+        {
+          key: 'timestamp',
+          text: '最終更新',
+          value: 'timestamp',
+        },
       ],
       tableData: [],
       rawTableData: [],
+      nowtime: Date.now(),
     };
   },
   created() {
@@ -78,9 +86,12 @@ export default {
       });
       this.tableData = this.rawTableData.slice();
       this.isUnloaded = false;
-      this.tableSort();
       this.tableFilter();
+      this.tableSort();
     });
+    window.setInterval(() => {
+      this.nowtime = Date.now();
+    }, 30000);
   },
   watch: {
     sortKey() {
