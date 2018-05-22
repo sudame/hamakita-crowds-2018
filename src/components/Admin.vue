@@ -26,7 +26,11 @@ import firebase from 'firebase';
 
 export default {
   mounted() {
-    if (!this.userData.isLogined) this.$router.push('/login/');
+    if (!this.userData.isLogined) {
+      this.$router.push('/login/');
+    } else if (this.userData.user.uid === 'pRSUXgzCrAXD1yk8qJhC8n8ZWJQ2') {
+      this.$router.push('/super-admin/');
+    }
   },
   created() {
     if (this.userData.isLogined) {
