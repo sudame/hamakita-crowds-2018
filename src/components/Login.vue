@@ -164,8 +164,9 @@ export default {
       if (this.userData.isLogined) {
         if (this.userData.user.uid === 'pRSUXgzCrAXD1yk8qJhC8n8ZWJQ2') {
           this.$router.push('/super-admin/');
+        } else {
+          this.$router.push('/admin/');
         }
-        if (this.userData.user.uid === 'pRSUXgzCrAXD1yk8qJhC8n8ZWJQ2') this.$router.push('/admin/');
       }
     },
   },
