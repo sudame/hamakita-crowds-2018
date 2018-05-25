@@ -13,13 +13,24 @@
               a(href="/#/about", title="title") ABOUT
             sui-dropdown-item(link)
               a(href="/#/admin", title="title") ADMIN
+            sui-dropdown-item(v-if="userData.isLogined")
+              a(@click="LOGOUT()") LOGOUT
 
 </template>
 
 <script>
-export default {};
+import { mapActions, mapGetters } from 'vuex';
+import { LOGIN, LOGOUT } from '@/vuex/mutation-types';
+
+export default {
+  computed: {
+    ...mapGetters(['userData']),
+  },
+  methods: {
+    ...mapActions([LOGOUT]),
+  },
+};
 </script>
 
 <style>
-
 </style>
