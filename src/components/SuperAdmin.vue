@@ -93,7 +93,10 @@ export default {
     },
     update(id) {
       const data = {};
-      if (this.state[id].peopleVal != null) data.people = this.state[id].peopleVal;
+      if (this.state[id].peopleVal != null) {
+        data.people = this.state[id].peopleVal;
+        data.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      }
       if (this.state[id].wpgVal != null) data.waitPerGroup = this.state[id].wpgVal;
       firebase
         .firestore()
