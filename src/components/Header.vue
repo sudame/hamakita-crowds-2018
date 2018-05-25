@@ -14,7 +14,7 @@
             sui-dropdown-item(link)
               a(href="/#/admin", title="title") ADMIN
             sui-dropdown-item(v-if="userData.isLogined")
-              a(@click="LOGOUT()") LOGOUT
+              a(@click="logout()") LOGOUT
 
 </template>
 
@@ -28,6 +28,10 @@ export default {
   },
   methods: {
     ...mapActions([LOGOUT]),
+    logout(){
+      this.LOGOUT();
+      this.$router.push('/login/');
+    }
   },
 };
 </script>
