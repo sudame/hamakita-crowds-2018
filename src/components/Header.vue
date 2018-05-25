@@ -28,10 +28,10 @@ export default {
   },
   methods: {
     ...mapActions([LOGOUT]),
-    logout(){
+    logout() {
       this.LOGOUT();
       this.$router.push('/login/');
-    }
+    },
   },
 };
 </script>
