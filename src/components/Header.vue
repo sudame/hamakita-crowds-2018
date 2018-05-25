@@ -20,7 +20,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { LOGIN, LOGOUT } from '@/vuex/mutation-types';
+import { LOGOUT } from '@/vuex/mutation-types';
 
 export default {
   computed: {
