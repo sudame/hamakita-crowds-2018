@@ -1,9 +1,9 @@
 <template lang="pug">
   div
-    div(is="sui-container")
-      sui-dropdown(button class="primary" v-model="sortKey" :options="columns")
-      sui-dropdown(button class="primary" v-model="sortAbs" :options="sortAbsOptions")
-      sui-input(v-model="filterWord" @input="tableFilter()" icon="search" placeholder="検索")
+    div.sort-tools(is="sui-container")
+      sui-dropdown.sort-tool(button class="primary" v-model="sortKey" :options="columns")
+      sui-dropdown.sort-tool(button class="primary" v-model="sortAbs" :options="sortAbsOptions")
+      sui-input.sort-tool(v-model="filterWord" @input="tableFilter()" icon="search" placeholder="検索")
     sui-divider(hidden)
     div(is="sui-container")
       sui-table(striped unstackable)
@@ -128,5 +128,13 @@ export default {
 <style lang="scss">
 .loader-wrapper {
   text-align: center;
+}
+
+.sort-tools{
+  text-align: center;
+}
+
+.sort-tool{
+  margin: 0.5rem auto;
 }
 </style>
