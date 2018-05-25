@@ -23,6 +23,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import { LOGIN, LOGOUT } from '@/vuex/mutation-types';
 import firebase from 'firebase';
+firebase.auth();
 
 export default {
   mounted() {

@@ -26,6 +26,7 @@ import firebase from 'firebase';
 import { mapGetters } from 'vuex';
 
 const firestore = firebase.firestore();
+firebase.auth();
 
 export default {
   mounted() {
