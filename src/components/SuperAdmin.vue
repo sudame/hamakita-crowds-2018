@@ -1,12 +1,7 @@
 <template lang="pug">
   div
     div(is="sui-container")
-      sui-dropdown(button class="primary" v-model="sortKey" :options="columns")
-      sui-dropdown(button class="primary" v-model="sortAbs" :options="sortAbsOptions")
-      sui-input(v-model="filterWord" @input="tableFilter()" icon="search" placeholder="検索")
-    sui-divider(hidden)
-    div(is="sui-container")
-      sui-table(striped)
+      sui-table(striped v-if="!isUnloaded")
         sui-table-header
           sui-table-row
             sui-table-header-cell(v-for="c in columns" :key="c.key") {{c.text}}
@@ -14,13 +9,14 @@
           sui-table-row(v-for="d in tableData" :key="d.id")
             sui-table-cell {{d.name}}
             sui-table-cell
-                sui-input.edit(:value="d.people" disabled) {{d.people}}
+                sui-input.edit(type="number" :placeholder="d.people" v-model="state[d.id].peopleVal" :disabled="state[d.id] ? !state[d.id].isEditing : false")
                 | 組
             sui-table-cell
-                sui-input.edit(:value="d.waitPerGroup" disabled)
+                sui-input.edit(type="number" :placeholder="d.waitPerGroup" v-model="state[d.id].wpgVal" :disabled="state[d.id] ? !state[d.id].isEditing : false")
                 | 分/組
             sui-table-cell(text-align="center")
-                sui-button(primary @click="edit(d.id)") 編集
+                sui-button(primary @click="edit(d.id)" v-if="state[d.id] ? !state[d.id].isEditing : false") 編集
+                sui-button(color="red" @click="update(d.id)" v-else) 更新
       .loader-wrapper
         sui-loader.inline(:active="isUnloaded")
 </template>
@@ -42,19 +38,6 @@ export default {
   data() {
     return {
       isUnloaded: true,
-      sortAbs: 1,
-      sortAbsOptions: [
-        {
-          text: '昇順',
-          value: 1,
-        },
-        {
-          text: '降順',
-          value: -1,
-        },
-      ],
-      filterWord: '',
-      sortKey: 'name_yomi',
       columns: [
         {
           key: 'name',
@@ -78,63 +61,56 @@ export default {
         },
       ],
       tableData: [],
-      rawTableData: [],
-      nowtime: Date.now(),
+      state: {},
       isEditRow: {},
     };
   },
   created() {
     firestore
       .collection('data')
+      .orderBy('name_yomi')
       .get()
       .then(querySnapshot => {
         this.tableData = [];
-        this.rawTableData = [];
         querySnapshot.forEach(doc => {
           const insertObj = Object.assign(doc.data(), { id: doc.id });
-          this.rawTableData.push(insertObj);
+          this.tableData.push(insertObj);
           this.isEditRow[doc.id] = false;
         });
-        this.tableData = this.rawTableData.slice();
+      })
+      .then(() => {
+        this.tableData.forEach(el => {
+          this.$set(this.state, el.id, { isEditing: false, peopleVal: null, wpgVal: null });
+        });
+      })
+      .then(() => {
         this.isUnloaded = false;
-        this.tableFilter();
-        this.tableSort();
       });
-    window.setInterval(() => {
-      this.nowtime = Date.now();
-    }, 30000);
-  },
-  watch: {
-    sortKey() {
-      this.tableSort();
-    },
-    sortAbs() {
-      this.tableSort();
-    },
   },
   methods: {
     edit(id) {
-      console.log(id);
-      console.log(this.isEditRow.id);
+      this.state[id].isEditing = true;
     },
-    tableFilter() {
-      this.tableData = this.rawTableData.filter(el => {
-        let isMatch = false;
-        Object.keys(el).forEach(key => {
-          if (el[key].toString().indexOf(this.filterWord) >= 0) isMatch = true;
+    update(id) {
+      const data = {};
+      if (this.state[id].peopleVal != null) data.people = this.state[id].peopleVal;
+      if (this.state[id].wpgVal != null) data.waitPerGroup = this.state[id].wpgVal;
+      firebase
+        .firestore()
+        .collection('data')
+        .doc(id)
+        .set(data, { merge: true })
+        .then(() => {
+          if (this.state[id].peopleVal != null) {
+            this.tableData.find(el => el.id === id).people = this.state[id].peopleVal;
+          }
+          if (this.state[id].wpgVal != null) {
+            this.tableData.find(el => el.id === id).waitPerGroup = this.state[id].wpgVal;
+          }
+          this.state[id].wpgVal = null;
+          this.state[id].peopleVal = null;
+          this.state[id].isEditing = false;
         });
-        return isMatch;
-      });
-    },
-    tableSort() {
-      this.tableData.sort(this.sortAlg(this.sortKey));
-    },
-    sortAlg(key) {
-      return (a, b) => {
-        if (a[key] > b[key]) return this.sortAbs;
-        else if (a[key] < b[key]) return this.sortAbs * -1;
-        return 0;
-      };
     },
   },
   computed: {
