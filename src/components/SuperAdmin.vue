@@ -26,10 +26,10 @@ import firebase from 'firebase';
 import { mapGetters } from 'vuex';
 
 const firestore = firebase.firestore();
-firebase.auth();
 
 export default {
   mounted() {
+    firebase.auth();
     if (!this.userData.isLogined) {
       this.$router.push('/login/');
     } else if (this.userData.user.uid !== 'pRSUXgzCrAXD1yk8qJhC8n8ZWJQ2') {

@@ -23,10 +23,10 @@
 import { mapActions, mapGetters } from 'vuex';
 import { LOGIN, LOGOUT } from '@/vuex/mutation-types';
 import firebase from 'firebase';
-firebase.auth();
 
 export default {
   mounted() {
+    firebase.auth();    
     if (!this.userData.isLogined) {
       this.$router.push('/login/');
     } else if (this.userData.user.uid === 'pRSUXgzCrAXD1yk8qJhC8n8ZWJQ2') {
