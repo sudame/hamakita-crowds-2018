@@ -1,6 +1,11 @@
 <template lang="pug">
   div
-    div(is="sui-container")
+    section.edit-info(is="sui-container")
+      h3 運営委員会からのメッセージ編集
+      textarea(:placeholder="infoPlaceHolder" v-model="infoText")
+      sui-button(primary @click="editInfo()") 更新
+    section(is="sui-container")
+      h3 クラス展・部展情報編集
       sui-table(striped v-if="!isUnloaded")
         sui-table-header
           sui-table-row
@@ -19,6 +24,10 @@
                 sui-button(color="red" @click="update(d.id)" v-else) 更新
       .loader-wrapper
         sui-loader.inline(:active="isUnloaded")
+    section.update-message(v-show="messageIsVisible")
+      sui-message.message(:color="updateSuccess ? 'green' : 'red'" size="big")
+        sui-message-header {{updateSuccess ? '更新しました' : '更新に失敗しました'}}
+        p {{updateSuccess ? 'データは正常に更新されました。' : '申し訳ありません。もう一度お試しください。'}}
 </template>
 
 <script>
@@ -38,6 +47,11 @@ export default {
   },
   data() {
     return {
+      messageIsVisible: false,
+      updateSuccess: true,
+      updateMessage: '',
+      infoText: '',
+      infoPlaceHolder: '',
       isUnloaded: true,
       columns: [
         {
@@ -87,6 +101,13 @@ export default {
       .then(() => {
         this.isUnloaded = false;
       });
+    firestore
+      .collection('messages')
+      .doc('exec')
+      .get()
+      .then(querySnapshot => {
+        this.infoPlaceHolder = querySnapshot.data().text;
+      });
   },
   methods: {
     edit(id) {
@@ -114,7 +135,39 @@ export default {
           this.state[id].wpgVal = null;
           this.state[id].peopleVal = null;
           this.state[id].isEditing = false;
+          this.updateSuccess = true;
+          this.showMessage();
+        })
+        .catch(() => {
+          this.updateSuccess = false;
+          this.showMessage();
         });
+    },
+    editInfo() {
+      firebase
+        .firestore()
+        .collection('messages')
+        .doc('exec')
+        .set({
+          text: this.infoText,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+        .then(() => {
+          this.infoPlaceHolder = this.infoText;
+          this.infoText = '';
+          this.updateSuccess = true;
+          this.showMessage();
+        })
+        .catch(() => {
+          this.updateSuccess = false;
+          this.showMessage();
+        });
+    },
+    showMessage() {
+      this.messageIsVisible = true;
+      setTimeout(() => {
+        this.messageIsVisible = false;
+      }, 3000);
     },
   },
   computed: {
@@ -123,9 +176,27 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.edit-info {
+  textarea {
+    width: 100%;
+    height: 10rem;
+    padding: 0.5rem;
+    white-space: pre-wrap;
+  }
+}
 .edit {
   max-width: 5rem;
   margin: auto 0.5rem;
+}
+
+section {
+  margin: 2rem auto;
+}
+
+.update-message {
+  position: fixed;
+  bottom: 0;
+  right: 3rem;
 }
 </style>
