@@ -153,6 +153,54 @@ export default {
           value: 'hamakita.crowds+39hr@gmail.com',
         },
         {
+          text: '書道部',
+          value: 'hamakita.crowds+calg@gmail.com',
+        },
+        {
+          text: '美術部',
+          value: 'hamakita.crowds+art@gmail.com',
+        },
+        {
+          text: '地学部',
+          value: 'hamakita.crowds+geo@gmail.com',
+        },
+        {
+          text: '生物部',
+          value: 'hamakita.crowds+bio@gmail.com',
+        },
+        {
+          text: '物理部',
+          value: 'hamakita.crowds+phys@gmail.com',
+        },
+        {
+          text: '数学部',
+          value: 'hamakita.crowds+math@gmail.com',
+        },
+        {
+          text: '写真部',
+          value: 'hamakita.crowds+pic@gmail.com',
+        },
+        {
+          text: '漕艇部',
+          value: 'hamakita.crowds+boat@gmail.com',
+        },
+        {
+          text: '将棋部',
+          value: 'hamakita.crowds+jchess@gmail.com',
+        },
+        {
+          text: '軽音部',
+          value: 'hamakita.crowds+band@gmail.com',
+        },
+        {
+          text: '茶華道部',
+          value: 'hamakita.crowds+sakado@gmail.com',
+        },
+        {
+          text: '囲碁部',
+          value: 'hamakita.crowds+go@gmail.com',
+        },
+        {
           text: 'admin',
           value: 'hamakita.crowds+admin@gmail.com',
         },
