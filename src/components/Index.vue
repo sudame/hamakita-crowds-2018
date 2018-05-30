@@ -1,11 +1,16 @@
 <template lang="pug">
   div
-    div.sort-tools(is="sui-container")
+    section.info(is="sui-container")
+      sui-message(color="teal")
+        sui-message-header
+          sui-icon(name="info circle icon")
+          | 運営委員会からのお知らせ
+        p {{infoText.length > 0 ? infoText : '現在お知らせはありません'}}
+    section.sort-tools(is="sui-container")
       sui-dropdown.sort-tool(button class="primary" v-model="sortKey" :options="columns")
       sui-dropdown.sort-tool(button class="primary" v-model="sortAbs" :options="sortAbsOptions")
       sui-input.sort-tool(v-model="filterWord" @input="tableFilter()" icon="search" placeholder="検索")
-    sui-divider(hidden)
-    div(is="sui-container")
+    section.maintable(is="sui-container")
       sui-table(striped unstackable)
         sui-table-header
           sui-table-row
@@ -36,6 +41,7 @@ firestore.settings(firestoreSetting);
 export default {
   data() {
     return {
+      infoText: '',
       isUnloaded: true,
       sortAbs: 1,
       sortAbsOptions: [
@@ -92,6 +98,9 @@ export default {
     window.setInterval(() => {
       this.nowtime = Date.now();
     }, 30000);
+    firestore.collection('messages').doc('exec').onSnapshot(querySnapshot => {
+      this.infoText = querySnapshot.data().text;
+    });
   },
   watch: {
     sortKey() {
@@ -128,6 +137,13 @@ export default {
 <style lang="scss">
 .loader-wrapper {
   text-align: center;
+}
+
+section.info{
+  margin-bottom: 1.5rem;
+  p{
+    white-space: pre-wrap;
+  }
 }
 
 .sort-tools{
