@@ -135,6 +135,12 @@ export default {
           this.state[id].wpgVal = null;
           this.state[id].peopleVal = null;
           this.state[id].isEditing = false;
+          this.updateSuccess = true;
+          this.showMessage();
+        })
+        .catch(() => {
+          this.updateSuccess = false;
+          this.showMessage();
         });
     },
     editInfo() {
@@ -145,12 +151,14 @@ export default {
         .set({
           text: this.infoText,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        }).then(() => {
+        })
+        .then(() => {
           this.infoPlaceHolder = this.infoText;
           this.infoText = '';
           this.updateSuccess = true;
           this.showMessage();
-        }).catch(() => {
+        })
+        .catch(() => {
           this.updateSuccess = false;
           this.showMessage();
         });
@@ -159,7 +167,7 @@ export default {
       this.messageIsVisible = true;
       setTimeout(() => {
         this.messageIsVisible = false;
-      }, 3000)
+      }, 3000);
     },
   },
   computed: {
@@ -186,7 +194,7 @@ section {
   margin: 2rem auto;
 }
 
-.update-message{
+.update-message {
   position: fixed;
   bottom: 0;
   right: 3rem;
