@@ -98,9 +98,12 @@ export default {
     window.setInterval(() => {
       this.nowtime = Date.now();
     }, 30000);
-    firestore.collection('messages').doc('exec').onSnapshot(querySnapshot => {
-      this.infoText = querySnapshot.data().text;
-    });
+    firestore
+      .collection('messages')
+      .doc('exec')
+      .onSnapshot(querySnapshot => {
+        this.infoText = querySnapshot.data().text;
+      });
   },
   watch: {
     sortKey() {
@@ -124,9 +127,28 @@ export default {
       this.tableData.sort(this.sortAlg(this.sortKey));
     },
     sortAlg(key) {
+      if (key === 'name_yomi') {
+        return (a, b) => {
+          if (a[key] > b[key]) return this.sortAbs;
+          else if (a[key] < b[key]) return this.sortAbs * -1;
+          return 0;
+        };
+      } else if (key === 'wait') {
+        return (a, b) => {
+          if (Number(a.waitPerGroup) * Number(a.people) > Number(b.waitPerGroup) * Number(b.people)) return this.sortAbs;
+          else if (Number(a.waitPerGroup) * Number(a.people) < Number(b.waitPerGroup) * Number(b.people)) return this.sortAbs * -1;
+          return 0;
+        };
+      } else if (key === 'timestamp') {
+        return (a, b) => {
+          if (Math.round((this.nowtime - a.timestamp.toDate()) / 60000) > Math.round((this.nowtime - b.timestamp.toDate()) / 60000)) return this.sortAbs;
+          else if (Math.round((this.nowtime - a.timestamp.toDate()) / 60000) < Math.round((this.nowtime - b.timestamp.toDate()) / 60000)) return this.sortAbs * -1;
+          return 0;
+        };
+      }
       return (a, b) => {
-        if (a[key] > b[key]) return this.sortAbs;
-        else if (a[key] < b[key]) return this.sortAbs * -1;
+        if (Number(a[key]) > Number(b[key])) return this.sortAbs;
+        else if (Number(a[key]) < Number(b[key])) return this.sortAbs * -1;
         return 0;
       };
     },
@@ -139,18 +161,18 @@ export default {
   text-align: center;
 }
 
-section.info{
+section.info {
   margin-bottom: 1.5rem;
-  p{
+  p {
     white-space: pre-wrap;
   }
 }
 
-.sort-tools{
+.sort-tools {
   text-align: center;
 }
 
-.sort-tool{
+.sort-tool {
   margin: 0.5rem auto;
 }
 </style>
